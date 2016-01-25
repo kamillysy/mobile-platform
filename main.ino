@@ -1,17 +1,17 @@
 
-#include "drive.h"
-#include "menu.h"
+#include "drive.hpp"
+#include "menu.hpp"
 int message=0;
 
- unsigned int ledPin=13;
- unsigned int motorLpinF=2;
- unsigned int motorLpinB=4;
- unsigned int motorLpinPWM=3;
- unsigned int encoderLeft=9;
- unsigned int motorRpinF=5;
- unsigned int motorRpinB=7;
- unsigned int motorRpinPWM=6;
- unsigned int encoderRight=8;
+ unsigned int const ledPin=13;
+ unsigned int const motorLpinF=2;
+ unsigned int const motorLpinB=4;
+ unsigned int const motorLpinPWM=3;
+ unsigned int const encoderLeft=9;
+ unsigned int const motorRpinF=5;
+ unsigned int const motorRpinB=7;
+ unsigned int const motorRpinPWM=6;
+ unsigned int const encoderRight=8;
 
  Drive* go;
  motor* Mleft;
