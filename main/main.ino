@@ -1,8 +1,7 @@
-
 #include "drive.hpp"
 #include "menu.hpp"
- int message=0;
- 
+static int message=160;
+
  unsigned int const ledPin=13;
  unsigned int const motorLpinF=2;
  unsigned int const motorLpinB=4;
@@ -14,8 +13,7 @@
  unsigned int const encoderRight=8;
 
  Drive* go;
- motor* Mleft;
- motor*  Mright;
+ 
  void setup(){
   pinMode(ledPin, OUTPUT);
   digitalWrite(ledPin, HIGH);
@@ -28,9 +26,7 @@
   analogWrite( motorRpinPWM, 128);
   digitalRead(encoderLeft);
   digitalRead(encoderRight);
- Mleft=new motor(motorLpinPWM,motorLpinF,motorLpinB,encoderLeft);
-  Mright=new motor(motorRpinPWM,motorRpinF,motorRpinB,encoderRight); 
-   go=new Drive(Mleft,Mright);
+  go=new Drive(motorLpinPWM,motorLpinF,motorLpinB,encoderLeft,motorRpinPWM,motorRpinF,motorRpinB,encoderRight);
   digitalWrite(ledPin, LOW);
  }
  
@@ -38,5 +34,5 @@
   message=Serial.read();
   menu(message,go);
  }
- 
+
  

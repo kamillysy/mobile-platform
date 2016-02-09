@@ -6,29 +6,29 @@
 
 class Drive{
 public:
-  Drive(motor* Left,motor* Right);
-  virtual ~Drive(){
-  }
+  Drive(Motor* left,Motor* right);
+  Drive(int leftPwm,int leftForward,int leftBack,int leftEncoder,int rightPwm,int rightForward,int rightBack,int rightEncoder);
+  ~Drive(){delete leftM; delete rightM;}
 
 
-  void X(bool direct);
-  void Y(bool direct);
+  void stright(bool direct);
+  void around(bool direct);
 
   void softTurn(bool direct,bool way);
 
- void speed(int speed);
- void chspeed(int percent);
+ void changeSpeed(int speed);
+ void percentSpeed(int percent);
 
   void stop();
 
 private:
-  int  readspeed();
+  int  readSpeed();
   bool chstate(bool Ostate);
 
 
-  motor* Mleft;
-  motor*Mright;
-  int speed_;
+  Motor* leftM;
+  Motor* rightM;
+  int speed;
 
 
 

@@ -1,13 +1,10 @@
 #include "motor.hpp"
-motor::motor(int pwm,int pinF,int pinB,int encoder){
-        PWM_=pwm;
-        pinB_=pinB;
-        pinF_=pinF;
-        encoder_=encoder;
-        base();
-        
+Motor::Motor(int pwmPin,int forwardPin,int backPin,int encoderPin):
+pwm(pwmPin),pinForward(forwardPin), pinBack(backPin),encoder(encoderPin){
+       base();      
 }
-void motor::run(bool direct){
+Motor::~Motor(){}
+void Motor::run(bool direct){
   if(direct){
     ahead();
   }
@@ -15,36 +12,36 @@ void motor::run(bool direct){
     back();
   }
 }
-void motor::ahead(){
-    digitalWrite(pinF_,HIGH);
-    digitalWrite(pinB_,LOW); 
+void Motor::ahead(){
+    digitalWrite(pinForward,HIGH);
+    digitalWrite(pinBack,LOW); 
  }
 
  
 
 
-void motor::back(){
-  digitalWrite(pinF_,LOW);
-  digitalWrite(pinB_,HIGH); 
+void Motor::back(){
+  digitalWrite(pinForward,LOW);
+  digitalWrite(pinBack,HIGH); 
 }
 
-void motor::stop(){
-  digitalWrite(pinF_,HIGH);
-  digitalWrite(pinB_,HIGH);
+void Motor::stop(){
+  digitalWrite(pinForward,HIGH);
+  digitalWrite(pinBack,HIGH);
   delay(3);
-  digitalWrite(pinF_,LOW);
-  digitalWrite(pinB_,LOW);
+  digitalWrite(pinForward,LOW);
+  digitalWrite(pinBack,LOW);
 }
-void motor::stop1(){
-  digitalWrite(pinF_,LOW);
-  digitalWrite(pinB_,LOW);
-}
-
-bool motor::read(){
- return digitalRead(encoder_); 
+void Motor::softStop(){
+  digitalWrite(pinForward,LOW);
+  digitalWrite(pinBack,LOW);
 }
 
-void motor::set(bool state,bool direct){
+bool Motor::read(){
+ return digitalRead(encoder); 
+}
+
+void Motor::set(bool state,bool direct){
   while(state!=read()){
     if(direct)
      ahead();
@@ -54,22 +51,12 @@ void motor::set(bool state,bool direct){
    stop();
    
  }
- void motor::changestate(bool direct){
+ void Motor::changeState(bool direct){
  set(!read(),direct);
  }
-void motor::chstate(bool direct){
- while(read()!=CHANGE){
-   if(direct){
-     ahead();
-     }
-     else{
-       back();
-     }
- } 
- stop1();
-}
 
-bool motor::base(){
+
+bool Motor::base(){
  if(read()){
    set(1,1);
  }
@@ -79,9 +66,9 @@ bool motor::base(){
 return 1;
  
 }
-void motor::speed(int speed){
-  analogWrite( PWM_, speed);
+void Motor::speed(int speed){
+  analogWrite( pwm, speed);
 }
-int motor::readspeed(){
-  return analogRead(PWM_);
+int Motor::readSpeed(){
+  return analogRead(pwm);
 }

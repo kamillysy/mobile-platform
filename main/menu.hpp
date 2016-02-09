@@ -12,6 +12,6 @@ int const rightahead=115;
 int const leftback=124;
 int const rightback=125;
 
-void menu(int zmienna,Drive* go);
+void menu(int order,Drive* go);
       
 #endif

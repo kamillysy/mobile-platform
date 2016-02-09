@@ -1,35 +1,35 @@
-#ifndef motor_hpp
-#define motor_hpp
+#ifndef Motor_hpp
+#define Motor_hpp
 #include <Arduino.h>
 
  
-class motor
+class Motor
 {
   public:
-	motor(int pwm,int pinF,int pinB,int encoder);
-	virtual ~motor(){}
+    Motor(int pwmPin,int forwardPin,int backPin,int encoderPin);
+	  ~Motor();
 	
-        void ahead();
-        void back();
+        
         void run(bool direct);
         void speed(int speed);
-        int  readspeed();
+        int  readSpeed();
         void stop();
-        void stop1();      
+        void softStop();      
         bool read(); 
         void set(bool state,bool direct);
-        void changestate(bool direct);
-        void chstate(bool direct);
-        int encoder_;
+        void changeState(bool direct);
+        
+        
 private:
-	
-        //void count(int &counter,bool direct);
-        bool base();
-     	
-       int PWM_;
-       int pinB_;
-       int pinF_;
        
+	     void ahead();
+       void back();
+       bool base();
+     	
+       int pwm;
+       int pinBack;
+       int pinForward;
+       int encoder;
 
 };
 
