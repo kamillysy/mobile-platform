@@ -1,15 +1,15 @@
 
 #include "drive.hpp"
 #include "menu.hpp"
-int message=0;
-
+ int message=0;
+ 
  unsigned int const ledPin=13;
  unsigned int const motorLpinF=2;
  unsigned int const motorLpinB=4;
  unsigned int const motorLpinPWM=3;
  unsigned int const encoderLeft=9;
- unsigned int const motorRpinF=5;
- unsigned int const motorRpinB=7;
+ unsigned int const motorRpinF=7;
+ unsigned int const motorRpinB=5;
  unsigned int const motorRpinPWM=6;
  unsigned int const encoderRight=8;
 
@@ -33,6 +33,7 @@ int message=0;
    go=new Drive(Mleft,Mright);
   digitalWrite(ledPin, LOW);
  }
+ 
  void loop(){
   message=Serial.read();
   menu(message,go);

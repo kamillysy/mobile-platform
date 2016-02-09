@@ -44,8 +44,8 @@ void Drive::X(bool direct){
     Mright->run(direct);
     Mleft->run(direct);
   }
-  Mright->stop1();
-  Mleft->stop1(); 
+  Mright->stop();
+  Mleft->stop(); 
 
 }
 
@@ -71,8 +71,8 @@ void Drive::Y(bool direct){
     Mright->run(!direct);
     Mleft->run(direct);
   }
-  Mright->stop1();
-  Mleft->stop1(); 
+  Mright->stop();
+  Mleft->stop(); 
 
 }
 
@@ -109,8 +109,8 @@ void Drive::softTurn(bool direct,bool way){
     Slower->run(direct);
     
   }
-  Slower->stop1();
-  Faster->stop1(); 
+  Slower->stop();
+  Faster->stop(); 
 
 }
 
