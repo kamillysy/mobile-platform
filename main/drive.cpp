@@ -1,6 +1,6 @@
 #include "drive.hpp"
 #include <Arduino.h>
-Drive::Drive(Motor* leftM_, Motor* rightM_): leftM(leftM_), rightM(rightM_) {
+Drive::Drive(Motor* left, Motor* right): leftM(left), rightM(right) {
   speed = readSpeed();
 }
 
