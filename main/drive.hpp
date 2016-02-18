@@ -16,15 +16,15 @@ public:
 
   void softTurn(bool direct,bool way);
 
- void changeSpeed(int speed);
+ 
  void percentSpeed(int percent);
 
   void stop();
-
+  void softStop();
 private:
   int  readSpeed();
-  bool chstate(bool Ostate);
-
+  bool chstate(bool oldState);
+  void changeSpeed(int speed);
 
   Motor* leftM;
   Motor* rightM;
@@ -34,6 +34,7 @@ private:
 
 };
 
+unsigned int const commandStop=160;
 #endif
 
 

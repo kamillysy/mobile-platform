@@ -1,7 +1,8 @@
 #include "motor.hpp"
 Motor::Motor(int pwmPin,int forwardPin,int backPin,int encoderPin):
 pwm(pwmPin),pinForward(forwardPin), pinBack(backPin),encoder(encoderPin){
-       base();      
+       //base(); 
+       softStop();     
 }
 Motor::~Motor(){}
 void Motor::run(bool direct){

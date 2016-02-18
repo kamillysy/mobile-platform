@@ -2,13 +2,13 @@
 #include <Arduino.h>
 Drive::Drive(Motor* leftM_, Motor* rightM_): leftM(leftM_), rightM(rightM_) {
   speed = readSpeed();
-  stop();
 }
+
 Drive:: Drive(int leftPwm, int leftForward, int leftBack, int leftEncoder, int rightPwm, int rightForward, int rightBack, int rightEncoder ) {
   leftM = new Motor(leftPwm, leftForward, leftBack, leftEncoder);
   rightM = new Motor(rightPwm, rightForward, rightBack, rightEncoder);
   speed = readSpeed();
-  stop();
+ 
 }
 
 int Drive::readSpeed() {
@@ -26,7 +26,7 @@ void Drive::stright(bool direct) {
   bool stateR = rightM->read();
   bool stateL = leftM->read();
 
-  while (160 != Serial.read()) {
+  while (commandStop != Serial.read()) {
     if ((counterL - counterR) > 0) {
       leftM->softStop();
     }
@@ -53,7 +53,7 @@ void Drive::around(bool direct) {
   int counterR = 0;
   bool stateR = rightM->read();
   bool stateL = leftM->read();
-  while (160 != Serial.read()) {
+  while (commandStop != Serial.read()) {
     if ((counterL - counterR) > 0) {
       leftM->softStop();
     }
@@ -91,7 +91,7 @@ void Drive::softTurn(bool direct, bool way) {
   bool stateF = faster->read();
   bool stateS = slower->read();
 
-  while (160 != Serial.read()) {
+  while (commandStop != Serial.read()) {
     if ((2 * counterS > counterF)) {
       slower->softStop();
     }
@@ -123,15 +123,17 @@ void Drive::stop() {
   rightM->stop();
   leftM->stop();
 }
+void Drive::softStop() {
+  rightM->softStop();
+  leftM->softStop();
+}
 
 void Drive::percentSpeed(int percent) {
   int s = ((int)percent * 2.55);
-  //Serial.print(s);
-  //Serial.print('\n');
   changeSpeed(s);
 }
-bool Drive::chstate(bool Ostate) {
-  if (Ostate) {
+bool Drive::chstate(bool oldState) {
+  if (oldState) {
     return false;
   }
   return true;
