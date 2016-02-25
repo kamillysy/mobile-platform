@@ -21,7 +21,7 @@ class Motor
 
 private:
        
-	     void ahead();
+       void ahead();
        void back();
       
        int pwm;
