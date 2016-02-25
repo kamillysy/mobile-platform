@@ -1,14 +1,13 @@
 #include "drive.hpp"
 #include <Arduino.h>
-Drive::Drive(Motor* left, Motor* right): leftM(left), rightM(right) {
+Drive::Drive(Motor* leftM_, Motor* rightM_): leftM(leftM_), rightM(rightM_) {
   speed = readSpeed();
 }
-
-Drive:: Drive(int leftPwm, int leftForward, int leftBack, int leftEncoder, int rightPwm, int rightForward, int rightBack, int rightEncoder ) {
-  leftM = new Motor(leftPwm, leftForward, leftBack, leftEncoder);
-  rightM = new Motor(rightPwm, rightForward, rightBack, rightEncoder);
+Drive:: Drive(int leftPwm, int leftForward, int leftBack, int rightPwm, int rightForward, int rightBack) {
+  leftM = new Motor(leftPwm, leftForward, leftBack);
+  rightM = new Motor(rightPwm, rightForward, rightBack);
   speed = readSpeed();
- 
+
 }
 
 int Drive::readSpeed() {
@@ -18,55 +17,46 @@ int Drive::readSpeed() {
     return L;
   return 0;
 }
+void Drive::encoderLeftChanged(){
+  leftM->counter++;
+}
 
+void Drive::encoderRightChanged(){
+  rightM->counter++;
+}
 
 void Drive::stright(bool direct) {
-  int counterL = 0;
-  int counterR = 0;
-  bool stateR = rightM->read();
-  bool stateL = leftM->read();
-
-  while (commandStop != Serial.read()) {
-    if ((counterL - counterR) > 0) {
+  leftM->counter=0;
+  rightM->counter=0;
+   
+  while (160 != Serial.read()) {
+    if ((leftM->counter - rightM->counter) > 0) {
+      
       leftM->softStop();
     }
-    if ((counterR - counterL) > 0) {
+    if ((rightM->counter - leftM->counter) > 0) {
       rightM->softStop();
-    }
-    if (leftM->read() != stateL) {
-      stateL = chstate(stateL);
-      counterL++;
-    }
-    if (rightM->read() != stateR) {
-      stateR = chstate(stateR);
-      counterR++;
     }
     rightM->run(direct);
     leftM->run(direct);
+
   }
   rightM->stop();
   leftM->stop();
 }
 
 void Drive::around(bool direct) {
-  int counterL = 0;
-  int counterR = 0;
-  bool stateR = rightM->read();
-  bool stateL = leftM->read();
-  while (commandStop != Serial.read()) {
-    if ((counterL - counterR) > 0) {
+  leftM->counter=0;
+  rightM->counter=0;
+  
+  while (160 != Serial.read()) {
+    if ((leftM->counter - rightM->counter) > 0) {
       leftM->softStop();
     }
-    if ((counterR - counterL) > 0)
+    if ((rightM->counter - leftM->counter) > 0) {
       rightM->softStop();
-    if (leftM->read() != stateL) {
-      stateL = chstate(stateL);
-      counterL++;
     }
-    if (rightM->read() != stateR) {
-      stateR = chstate(stateR);
-      counterR++;
-    }
+
     rightM->run(!direct);
     leftM->run(direct);
   }
@@ -76,33 +66,25 @@ void Drive::around(bool direct) {
 
 
 void Drive::softTurn(bool direct, bool way) {
-  int counterF = 0;
-  int counterS = 0;
   Motor* faster;
   Motor* slower;
   if (way) {
     faster = leftM;
     slower = rightM;
-  }
+    }
   else {
     slower = leftM;
     faster = rightM;
   }
-  bool stateF = faster->read();
-  bool stateS = slower->read();
+  faster->counter=0;
+  slower->counter=0; 
 
-  while (commandStop != Serial.read()) {
-    if ((2 * counterS > counterF)) {
+
+  while (160 != Serial.read()) {
+    if ((2 * slower->counter > faster->counter)) {
       slower->softStop();
     }
-    if (faster->read() != stateF) {
-      stateF = chstate(stateF);
-      counterF++;
-    }
-    if (slower->read() != stateS) {
-      stateS = chstate(stateS);
-      counterS++;
-    }
+
     faster->run(direct);
     slower->run(direct);
 
@@ -130,11 +112,7 @@ void Drive::softStop() {
 
 void Drive::percentSpeed(int percent) {
   int s = ((int)percent * 2.55);
+
   changeSpeed(s);
 }
-bool Drive::chstate(bool oldState) {
-  if (oldState) {
-    return false;
-  }
-  return true;
-}
+

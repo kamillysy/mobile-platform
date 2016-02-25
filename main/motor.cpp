@@ -1,8 +1,7 @@
 #include "motor.hpp"
-Motor::Motor(int pwmPin,int forwardPin,int backPin,int encoderPin):
-pwm(pwmPin),pinForward(forwardPin), pinBack(backPin),encoder(encoderPin){
-       //base(); 
-       softStop();     
+Motor::Motor(int pwmPin,int forwardPin,int backPin):
+pwm(pwmPin),pinForward(forwardPin), pinBack(backPin),counter(0){
+       softStop();      
 }
 Motor::~Motor(){}
 void Motor::run(bool direct){
@@ -17,9 +16,6 @@ void Motor::ahead(){
     digitalWrite(pinForward,HIGH);
     digitalWrite(pinBack,LOW); 
  }
-
- 
-
 
 void Motor::back(){
   digitalWrite(pinForward,LOW);
@@ -38,38 +34,15 @@ void Motor::softStop(){
   digitalWrite(pinBack,LOW);
 }
 
-bool Motor::read(){
- return digitalRead(encoder); 
-}
 
-void Motor::set(bool state,bool direct){
-  while(state!=read()){
-    if(direct)
-     ahead();
-     else
-     back();
-   }
-   stop();
-   
- }
- void Motor::changeState(bool direct){
- set(!read(),direct);
- }
-
-
-bool Motor::base(){
- if(read()){
-   set(1,1);
- }
- if(!read()){
-   return 0;
-   }
-return 1;
- 
-}
 void Motor::speed(int speed){
-  analogWrite( pwm, speed);
+  settedSpeed=speed;
+ 
+  analogWrite(pwm,speed);
 }
 int Motor::readSpeed(){
   return analogRead(pwm);
 }
+
+
+ 

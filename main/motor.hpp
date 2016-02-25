@@ -2,11 +2,12 @@
 #define Motor_hpp
 #include <Arduino.h>
 
- 
+
+
 class Motor
 {
   public:
-    Motor(int pwmPin,int forwardPin,int backPin,int encoderPin);
+    Motor(int pwmPin,int forwardPin,int backPin);
 	  ~Motor();
 	
         
@@ -14,24 +15,22 @@ class Motor
         void speed(int speed);
         int  readSpeed();
         void stop();
-        void softStop();      
-        bool read(); 
-        void set(bool state,bool direct);
-        void changeState(bool direct);
+        void softStop();
+        int counter;
         
-        
+
 private:
        
 	     void ahead();
        void back();
-       bool base();
-     	
+      
        int pwm;
        int pinBack;
        int pinForward;
-       int encoder;
+       int settedSpeed;
+       
 
 };
 
-
+ 
 #endif
